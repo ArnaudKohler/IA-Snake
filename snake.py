@@ -4,7 +4,7 @@ import pygame
 class Snake:
     def __init__(self, GRID_SIZE, CELL_SIZE):
         self.positions = [(5, 5)]
-        self.direction = pygame.Vector2(1, 0) # Direction initiale Right
+        self.direction = pygame.Vector2(0, 0) # Direction initiale Right
         self.grow = False
         self.GRID_SIZE = GRID_SIZE
         self.CELL_SIZE = CELL_SIZE
@@ -29,7 +29,7 @@ class Snake:
 
     def reset(self):
         self.positions = [(5, 5)]
-        self.direction = pygame.Vector2(1, 0)
+        self.direction = pygame.Vector2(0, 0)
 
 
     def grow_snake(self):

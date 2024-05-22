@@ -46,7 +46,7 @@ def main():
         snake.draw(screen)
         food.draw(screen)
         pygame.display.update()
-        clock.tick(10)
+        clock.tick(5)
 
 if __name__ == "__main__":
     main()
