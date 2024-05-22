@@ -17,14 +17,14 @@ class Snake:
         if self.grow:
             self.positions.insert(0, new_head)
             self.grow = False
-        else:
-            self.positions.pop()
-            self.positions.insert(0, new_head)
+        else: #Movement
+            self.positions.pop() #Remove the last cell of the snake
+            self.positions.insert(0, new_head) #Add the new position of the head 
         
-        if new_head in self.positions[1:]:
+        if new_head in self.positions[1:]: #If the position of the head is already in the positions of the body of the snake = dead & reset
             self.reset()
         
-        if not 0 <= new_head[0] < self.GRID_SIZE or not 0 <= new_head[1] < self.GRID_SIZE:
+        if not 0 <= new_head[0] < self.GRID_SIZE or not 0 <= new_head[1] < self.GRID_SIZE: #If get out of the grid, reset
             self.reset()
 
     def reset(self):

@@ -5,7 +5,7 @@ class Grid:
         self.size = size
         self.cell_size = cell_size
 
-    def draw(self, surface):
+    def draw(self, surface): 
         for x in range(self.size):
             for y in range(self.size):
                 rect = pygame.Rect(x * self.cell_size, y * self.cell_size, self.cell_size, self.cell_size)
