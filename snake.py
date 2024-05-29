@@ -2,12 +2,13 @@ import pygame
 
 # Classe Snake
 class Snake:
-    def __init__(self, GRID_SIZE, CELL_SIZE):
+    def __init__(self, GRID_SIZE, CELL_SIZE, grid_offsets):
         self.positions = [(5, 5)]
         self.direction = pygame.Vector2(0, 0) # Direction initiale Right
         self.grow = False
         self.GRID_SIZE = GRID_SIZE
         self.CELL_SIZE = CELL_SIZE
+        self.offset_x, self.offset_y = grid_offsets
 
     def update(self):
         head_x, head_y = self.positions[0]
@@ -37,5 +38,5 @@ class Snake:
 
     def draw(self, surface):
         for position in self.positions:
-            rect = pygame.Rect(position[0] * self.CELL_SIZE, position[1] * self.CELL_SIZE, self.CELL_SIZE, self.CELL_SIZE)
+            rect = pygame.Rect(self.offset_x + position[0] * self.CELL_SIZE, self.offset_y + position[1] * self.CELL_SIZE, self.CELL_SIZE, self.CELL_SIZE)
             pygame.draw.rect(surface, (0, 255, 0), rect)
