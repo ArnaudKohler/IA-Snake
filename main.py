@@ -3,6 +3,7 @@ import sys
 from snake import Snake
 from food import Food
 from grid import Grid
+from agent import Agent
 
 # Initialisation de Pygame
 pygame.init()
@@ -22,36 +23,38 @@ def main():
     grid_offsets = grid.get_offsets()
     snake = Snake(GRID_SIZE, CELL_SIZE, grid_offsets)
     food = Food(GRID_SIZE, CELL_SIZE, snake, grid_offsets)
-
+    agent = Agent(0.4,1,1,0.995)
+    CLOCK_TIME = 5
 
     while True:
-        updated = False
+        current_state = agent.get_state(snake,food,grid)
+        q_values = agent.get_q_values(current_state)
+        print(current_state)
+        action = agent.choose_action(q_values, snake.get_direction())
+        print(action)
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 pygame.quit()
                 sys.exit()
             elif event.type == pygame.KEYDOWN: ##Check the pressed key and move the snake if direction accordingly, check if not the opposite direction
                 if event.key == pygame.K_UP:
-                    if snake.direction != pygame.Vector2(0, 1):
-                        snake.direction = pygame.Vector2(0, -1)
+                    CLOCK_TIME += 1
                 elif event.key == pygame.K_DOWN:
-                    if snake.direction != pygame.Vector2(0, -1):
-                        snake.direction = pygame.Vector2(0, 1)
-                elif event.key == pygame.K_LEFT:
-                    if snake.direction != pygame.Vector2(1, 0):
-                        snake.direction = pygame.Vector2(-1, 0)
-                elif event.key == pygame.K_RIGHT:
-                    if snake.direction != pygame.Vector2(-1, 0):
-                        snake.direction = pygame.Vector2(1, 0)
-                snake.update()
-                updated = True
-        if(not updated):
-            snake.update()
-        
+                    CLOCK_TIME -= 1
 
-        if snake.positions[0] == food.position:
+                
+        snake.perform_action(action)
+        #snake.update()
+
+        next_state, reward = agent.measure_rewards(snake,food,grid)
+        agent.update_q_table(current_state, action, reward, next_state)
+
+        """ if snake.positions[0] == food.position:
             snake.grow_snake()
-            food.new_food(snake)
+            food.new_food(snake) """
+
+
+        
 
         screen.fill((0, 0, 0)) #background color of the grid
         grid.draw(screen)
@@ -61,7 +64,7 @@ def main():
         score_text = font.render(f"Score: {len(snake.positions) - 1}", True, (255, 255, 255)) #text, antialias, color
         screen.blit(score_text, (SCREEN_WIDTH / 2 - 50, 20)) #Position x & y
         pygame.display.update()
-        clock.tick(8) #Speed of the game
+        clock.tick(CLOCK_TIME) #Speed of the game
 
 if __name__ == "__main__":
     main()

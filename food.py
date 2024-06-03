@@ -4,9 +4,9 @@ import random
 # Classe Food
 class Food:
     def __init__(self, GRID_SIZE, CELL_SIZE, snake, grid_offsets):
-        self.position = (0, 0)
         self.grid_size = GRID_SIZE
         self.cell_size = CELL_SIZE
+        self.position = random.randint(0, self.grid_size-1), random.randint(0, self.grid_size-1)
         self.offset_x, self.offset_y = grid_offsets
         self.new_food(snake)
         
