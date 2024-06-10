@@ -112,3 +112,25 @@ class Snake:
         elif action == "Right":
             if self.direction != pygame.Vector2(-1, 0):
                 self.direction = pygame.Vector2(1, 0)
+
+    def has_obstacles_ahead(self, grid,direction,max_range):
+        head_x = self.positions[0][0]
+        head_y = self.positions[0][1]
+        match(direction):
+            case "Left":
+                for i in range (max_range):
+                    if((head_x -(i+1),head_y) in self.positions or (head_x -(i+1)) < 0):
+                        return i+1
+            case "Right":
+                for i in range (max_range):
+                    if((head_x +(i+1),head_y) in self.positions or (head_x +(i+1)) > grid.size):
+                        return i+1
+            case "Down":
+                for i in range (max_range):
+                    if((head_x,head_y +(i+1)) in self.positions or (head_y -(i+1)) > grid.size):
+                        return i+1
+            case "Up":
+                for i in range (max_range):
+                    if((head_x,head_y -(i+1)) in self.positions or (head_y +(i+1)) < 0):
+                        return i
+        return "No obstacles"
