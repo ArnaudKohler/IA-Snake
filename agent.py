@@ -1,3 +1,4 @@
+import pickle
 from snake import Snake
 from food import Food
 from grid import Grid
@@ -12,6 +13,7 @@ class Agent:
         self.exploration_decay = exploration_decay
         self.episodes = 0
         self.starvation = 0
+        self.scores = []
         self.q_table = {}
         self.actions = ['Up','Right','Down','Left']
 
@@ -20,15 +22,18 @@ class Agent:
         head_direction = snake.get_direction() #Up, right, down, left
         food_direction = snake.get_relative_food_position(food) #Can be Up, Right, Down, Left, Top-left, Top-Right, Bottom-Left, Bottom-Right
 
-        has_obstacles_right = snake.has_obstacles_right(grid,snake.positions[0],5)
+        """has_obstacles_right = snake.has_obstacles_right(grid,snake.positions[0],5)
         has_obstacles_left = snake.has_obstacles_left(grid,snake.positions[0],5)
-        """ has_obstacles_up = snake.has_obstacles_up(grid,snake.positions[0],2)
+         has_obstacles_up = snake.has_obstacles_up(grid,snake.positions[0],2)
         has_obstacles_down = snake.has_obstacles_down(grid,snake.positions[0],2) """
 
         has_obstacle_ahead = snake.has_obstacles_ahead(grid,snake.get_direction(),3)
+        has_obstacles_right = snake.has_obstacles_ahead(grid,"Right",3)
+        has_obstacles_left = snake.has_obstacles_ahead(grid,"Left",3)
+
 
         #,has_obstacles_up,has_obstacles_right,has_obstacles_down,has_obstacles_left
-        state = (head_direction,food_direction, has_obstacle_ahead, has_obstacles_left, has_obstacles_right)
+        state = (head_direction,food_direction, has_obstacle_ahead, has_obstacles_right, has_obstacles_left)
         
         return state
     
@@ -77,13 +82,13 @@ class Agent:
             food.new_food(snake)
             self.starvation = 0
         elif(not 0 <= new_head[0] < grid.size or not 0 <= new_head[1] < grid.size or new_head in snake.positions[1:] ):
+            self.scores.append(len(snake.positions) - 1)
             snake.reset()
             self.starvation = 0
             reward = -350
             self.episodes +=1
         else:
             self.starvation +=1
-            print("puissance negative reward", pow(1.01,self.starvation))
             if(self.get_distance(food.position,snake.positions[0]) > self.get_distance(food.position,new_head)):
                 reward = 0 - pow(1.01,self.starvation) + pow(1.03,len(snake.positions))
             else:
@@ -100,3 +105,12 @@ class Agent:
 
     def get_distance(self,food_position,head_position):
         return math.sqrt((food_position[0]-head_position[0])**2 + (food_position[1]-head_position[1])**2)
+
+    def save_q_table(self, file_path):
+        with open(file_path, 'wb') as f:
+            pickle.dump(self.q_table, f)
+    
+    def load_q_table(self, file_path):
+        with open(file_path, 'rb') as f:
+            self.q_table = pickle.load(f)
+            
