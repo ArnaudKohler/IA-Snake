@@ -134,3 +134,4 @@ class Snake:
                     if((head_x,head_y -(i+1)) in self.positions or (head_y +(i+1)) < 0):
                         return i
         return "No obstacles"
+    

@@ -12,7 +12,7 @@ pygame.init()
 SCREEN_WIDTH, SCREEN_HEIGHT = 800, 600
 GRID_SIZE = 15 #Number of cells
 CELL_SIZE = 30 #Sife of celles in pixel
-NUMBER_OF_EPISODES = 200
+NUMBER_OF_EPISODES = 2000000
 
 screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT)) #Size of the app in pixels
 pygame.display.set_caption("Snake Game")
